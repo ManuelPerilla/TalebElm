@@ -1,4 +1,5 @@
-﻿using TalebElm.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using TalebElm.Domain.Entities;
 using TalebElm.Domain.Interfaces;
 using TalebElm.Infrastructure.Persistence;
 
@@ -6,12 +7,18 @@ namespace TalebElm.Infrastructure.Repositories;
 
 public class UserRepository(AppDbContext context) : IUserRepository
 {
-    public Task<User?> GetByIdAsync(Guid id)
-        => throw new NotImplementedException();
+    public async Task<User?> GetByIdAsync(Guid id)
+    {
+        return await context.Users.FirstOrDefaultAsync(user => user.Id == id);
+    }
 
-    public Task<IReadOnlyList<User>> GetAllAsync()
-        => throw new NotImplementedException();
+    public async Task<IReadOnlyList<User>> GetAllAsync()
+    {
+        return await context.Users.ToListAsync();
+    }
 
-    public Task AddAsync(User entity)
-        => throw new NotImplementedException();
+    public async Task AddAsync(User entity)
+    {
+        await context.Users.AddAsync(entity);
+    }
 }
